@@ -1,0 +1,44 @@
+#THIS SQL QUERY ON THE WORLD BANK DEBT IS TO SHOW MY ANALYTICAL SKILLS IN SQL.
+ #this are the number of rows in this tables
+SELECT COUNT(*)
+ FROM `bigquery-public-data.world_bank_intl_debt.international_debt`; 
+
+#checking for number missing values
+ SELECT COUNT(*)- COUNT(country_name) AS coname_missing,
+    COUNT(*)- COUNT(value) AS value_missing,
+    COUNT(*)- COUNT(country_code)AS cocode_missing,
+    COUNT(*)- COUNT(indicator_name) AS indname_missing,
+    COUNT(*)- COUNT(indicator_code)AS indcode_missing,
+    COUNT(*)- COUNT(year) AS year_missing
+ FROM `bigquery-public-data.world_bank_intl_debt.international_debt`; 
+
+#finding the number of countries in debt
+ SELECT 
+    COUNT(DISTINCT country_name) AS total_distinct_countries
+FROM `bigquery-public-data.world_bank_intl_debt.international_debt`;
+
+
+#let's find the different types of debt categories there is
+SELECT 
+    DISTINCT indicator_code AS total_debt_cat
+    FROM `bigquery-public-data.world_bank_intl_debt.international_debt`
+    ORDER BY total_debt_cat;
+
+#futhermore, let see which of these categories has more debtors
+SELECT indicator_code, COUNT(*) AS count
+       FROM `bigquery-public-data.world_bank_intl_debt.international_debt`
+    GROUP BY indicator_code
+    ORDER BY count DESC; # NOT CORRECT
+
+#How much debt are all these countries owing World bank
+SELECT 
+ROUND(SUM(value),2) as total_debt
+FROM `bigquery-public-data.world_bank_intl_debt.international_debt`
+WHERE value IS NOT NULL;
+
+SELECT country_name, ROUND(SUM(value),2) AS subtotal
+FROM `bigquery-public-data.world_bank_intl_debt.international_debt`
+GROUP BY country_name
+ORDER BY subtotal DESC;
+
+   
